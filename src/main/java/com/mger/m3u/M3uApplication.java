@@ -32,7 +32,10 @@ public class M3uApplication implements CommandLineRunner {
 		final Model modelFiltered = m3uFilterService.filterByGrouptitleContains(model, args[1]);
 		
 		//model.getEntries().forEach(e -> System.out.println(e));
-		modelFiltered.getEntries().forEach(e -> System.out.println(e));
+		//modelFiltered.getEntries().forEach(e -> System.out.println(e));
+
+		final File fileOut = new File(args[0]+".filtered.m3u");
+		m3uService.toFile(modelFiltered, fileOut);
 	}
 
 }

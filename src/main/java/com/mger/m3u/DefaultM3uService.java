@@ -1,7 +1,10 @@
 package com.mger.m3u;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,6 +46,30 @@ public class DefaultM3uService implements M3uService {
 
 	private final static class Serializer {
 
+		public boolean execute(final Model model, final File file) {
+			
+		    try {
+			    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			    
+				writer.write("#EXTM3U");
+				
+				for (final Entry e : model.getEntries()) {
+					writer.newLine();
+					writer.write(String.format("#EXTINF:-1 tvg-id=\"%s\" tvg-name=\"%s\" tvg-logo=\"%s\" group-title=\"%s\",%s"
+							, e.getTvgid(), e.getTvgname(), e.getTvglogo(), e.getGrouptitle(), e.getDescription()));
+					writer.newLine();
+					writer.write(e.getUrl());
+				}
+				
+				writer.close();
+			} catch (IOException e) {
+				LOGGER.error("error. serialization failed", e);
+				return false;
+			}
+		    
+		    return true;
+		}
+		
 	}
 
 	public final static class DeSerializer {
@@ -142,8 +169,8 @@ public class DefaultM3uService implements M3uService {
 	}
 
 	@Override
-	public void toFile(Model model, File file) {
-		// TODO Auto-generated method stub
-
+	public void toFile(final Model model, final File file) {
+		final Serializer serializer = new Serializer();
+		serializer.execute(model, file);
 	}
 }
