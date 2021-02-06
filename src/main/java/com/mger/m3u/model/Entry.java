@@ -10,6 +10,8 @@ public interface Entry {
 
 	String getGrouptitle();
 
+	String getDescription();
+
 	String getUrl();
 
 }
