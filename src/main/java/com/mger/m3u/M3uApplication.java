@@ -21,12 +21,18 @@ public class M3uApplication implements CommandLineRunner {
 	@Autowired
 	M3uService m3uService;
 
+	@Autowired
+	M3uFilterService m3uFilterService;
+
 	@Override
 	public void run(final String... args) throws Exception {
 		final File file = new File(args[0]);
 		final Model model = m3uService.fromFile(file);
 
+		final Model modelFiltered = m3uFilterService.filterByGrouptitleContains(model, args[1]);
+		
 		//model.getEntries().forEach(e -> System.out.println(e));
+		modelFiltered.getEntries().forEach(e -> System.out.println(e));
 	}
 
 }
